@@ -4,6 +4,7 @@ from esphome.components import i2c, sensor
 import esphome.config_validation as cv
 from esphome.const import (
     CONF_ENABLE_PIN,
+    CONF_UPDATE_INTERVAL,
     ICON_ARROW_EXPAND_VERTICAL,
     STATE_CLASS_MEASUREMENT,
     UNIT_METER,
@@ -32,10 +33,10 @@ DISTANCE_MODES = {
 def validate_timing_budget(config: ConfigType) -> ConfigType:
     # A measurement cannot complete if the sensor is polled faster than the time
     # it is allowed to spend on one reading.
-    if config[CONF_TIMING_BUDGET] > config[cv.CONF_UPDATE_INTERVAL]:
+    if config[CONF_TIMING_BUDGET] > config[CONF_UPDATE_INTERVAL]:
         raise cv.Invalid(
             f"timing_budget ({config[CONF_TIMING_BUDGET]}) must not be longer than "
-            f"update_interval ({config[cv.CONF_UPDATE_INTERVAL]})"
+            f"update_interval ({config[CONF_UPDATE_INTERVAL]})"
         )
     return config
 
