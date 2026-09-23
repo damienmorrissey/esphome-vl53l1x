@@ -1,0 +1,7 @@
+substitutions:
+  sda_pin: GPIO4
+  scl_pin: GPIO5
+  enable_pin: GPIO12
+
+packages:
+  vl53l1x: !include common.yaml

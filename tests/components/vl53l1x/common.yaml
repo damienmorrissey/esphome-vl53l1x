@@ -1,0 +1,33 @@
+# Shared component config for the per-platform test builds.
+#
+# When upstreaming into esphome/esphome, the `i2c:` block below should be
+# dropped in favour of the shared include used by core tests:
+#   packages:
+#     i2c: !include ../../test_build_components/common/i2c/<platform>.yaml
+# which provides a bus with id `i2c_bus`. It is declared inline here so the
+# tests remain runnable from this standalone repository.
+
+i2c:
+  - id: i2c_bus
+    sda: ${sda_pin}
+    scl: ${scl_pin}
+
+sensor:
+  # Default address, no enable pin - the minimal configuration.
+  - platform: vl53l1x
+    i2c_id: i2c_bus
+    name: VL53L1X Distance
+    address: 0x29
+    distance_mode: long
+    timing_budget: 50ms
+    update_interval: 60s
+
+  # Exercises the enable (XSHUT) pin code path and a non-default address.
+  - platform: vl53l1x
+    i2c_id: i2c_bus
+    name: VL53L1X Distance Second
+    address: 0x30
+    enable_pin: ${enable_pin}
+    distance_mode: short
+    timing_budget: 20ms
+    update_interval: 30s

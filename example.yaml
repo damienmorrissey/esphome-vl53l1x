@@ -1,0 +1,46 @@
+# Minimal working example for the VL53L1X external component.
+#
+# Wiring (ESP32, using the default hardware I2C pins):
+#   VCC   -> 3.3V        (NOT 5V - absolute max is ~3.6V)
+#   GND   -> GND
+#   SDA   -> GPIO21
+#   SCL   -> GPIO22
+#   XSHUT -> GPIO4       (required on breakouts with no onboard pull-up, e.g. CJMCU-531)
+#   GPIO1 -> unconnected
+
+esphome:
+  name: vl53l1x-example
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+external_components:
+  - source: github://damienmorrissey/esphome-vl53l1x
+    components: [vl53l1x]
+
+logger:
+
+api:
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+  frequency: 100kHz
+
+sensor:
+  - platform: vl53l1x
+    name: "Distance"
+    address: 0x29
+    enable_pin: GPIO4
+    # short (~1.3m) / medium (~3m) / long (~4m). Shorter modes cope better
+    # with bright ambient light.
+    distance_mode: long
+    # Time allowed per measurement - longer is more accurate. Must be <= update_interval.
+    timing_budget: 50ms
+    update_interval: 1s

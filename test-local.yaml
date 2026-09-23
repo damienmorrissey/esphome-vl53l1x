@@ -1,0 +1,36 @@
+# Local compile/flash test harness - points at the component in this repo
+# rather than at GitHub. Not intended as user-facing documentation; see
+# example.yaml for that.
+substitutions:
+  name: vl53l1x-test
+
+esphome:
+  name: ${name}
+  min_version: 2026.4.0
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+external_components:
+  - source:
+      type: local
+      path: components
+
+logger:
+  level: DEBUG
+
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+  frequency: 100kHz
+
+sensor:
+  - platform: vl53l1x
+    name: "Test Distance"
+    address: 0x29
+    enable_pin: GPIO4
+    distance_mode: long
+    timing_budget: 100ms
+    update_interval: 500ms
